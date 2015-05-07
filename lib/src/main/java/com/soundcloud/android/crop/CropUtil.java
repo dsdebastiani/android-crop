@@ -22,6 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
@@ -34,11 +35,14 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /*
  * Modified from original in AOSP.
  */
-class CropUtil {
+public class CropUtil {
 
     private static final String SCHEME_FILE = "file";
     private static final String SCHEME_CONTENT = "content";
@@ -164,6 +168,19 @@ class CropUtil {
         ProgressDialog dialog = ProgressDialog.show(
                 activity, title, message, true, false);
         new Thread(new BackgroundJob(activity, job, dialog, handler)).start();
+    }
+
+    public static File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        return image;
     }
 
     private static class BackgroundJob extends MonitoredActivity.LifeCycleAdapter implements Runnable {

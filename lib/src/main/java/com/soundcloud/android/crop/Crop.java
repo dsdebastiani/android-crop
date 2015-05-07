@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Builder for crop Intents and utils for handling result
  */
@@ -16,6 +19,7 @@ public class Crop {
 
     public static final int REQUEST_CROP = 6709;
     public static final int REQUEST_PICK = 9162;
+    public static final int REQUEST_CAPTURE = 9163;
     public static final int RESULT_ERROR = 404;
 
     static interface Extra {
